@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Активация нового оборудования</title>
+  <style>
+    /* Основные стили */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e0f7fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Заголовок */
+    h1 {
+      font-size: 24px;
+      color: #0277bd;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Стиль списка нарядов */
+    .order-list {
+      margin-bottom: 20px;
+    }
+    .order-item {
+      padding: 15px;
+      border: 1px solid #b3e5fc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background-color: #e1f5fe;
+      cursor: pointer;
+    }
+    .order-item:hover {
+      background-color: #b3e5fc;
+    }
+
+    /* Информация о наряде */
+    .order-info p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .order-info strong {
+      font-weight: bold;
+    }
+
+    /* Форма активации оборудования */
+    label {
+      font-size: 14px;
+      font-weight: bold;
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    /* Кнопка подтверждения */
+    .button {
+      margin-top: 15px;
+      background-color: #0277bd;
+      color: white;
+      padding: 10px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    .button:hover {
+      background-color: #01579b;
+    }
+
+    /* Уведомление об успешной активации */
+    .notification {
+      background-color: #e3f2fd;
+      color: #0277bd;
+      padding: 10px;
+      border-left: 4px solid #0277bd;
+      margin-top: 15px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #000;
+    }
+
+    /* Кнопки для сохранения, печати и поделиться */
+    .action-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .action-button {
+      background-color: #0288d1;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .action-button:hover {
+      background-color: #0277bd;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Система WFM - Активация оборудования</h1>
+  
+  <!-- Список нарядов -->
+  <div class="order-list">
+    <h2 style="color: #0277bd;">Выберите наряд на активацию</h2>
+    <div class="order-item" onclick="openOrderModal('123456789', 'Иван Иванов', 'ул. Пушкина, д. 10, кв. 5', 'Высокая', 'Установка нового оборудования', 'Алексей Петров')">
+      <p><strong>Наряд №123456789</strong> - Установка нового оборудования</p>
+      <p>Клиент: Иван Иванов | Важность: Высокая</p>
+      <p>Адрес: ул. Пушкина, д. 10, кв. 5</p>
+      <p>Специалист: Алексей Петров - Доступен</p>
+    </div>
+    <div class="order-item" onclick="openOrderModal('987654321', 'Петр Петров', 'ул. Ленина, д. 12, кв. 8', 'Средняя', 'Проверка подключения', 'Олег Сидоров')">
+      <p><strong>Наряд №987654321</strong> - Проверка подключения</p>
+      <p>Клиент: Петр Петров | Важность: Средняя</p>
+      <p>Адрес: ул. Ленина, д. 12, кв. 8</p>
+      <p>Специалист: Олег Сидоров - Доступен</p>
+    </div>
+  </div>
+
+  <!-- Модальное окно для информации о наряде -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeOrderModal()">&times;</span>
+      <div class="order-info">
+        <p><strong>Информация о наряде</strong></p>
+        <p><strong>Название наряда:</strong> <span id="modalOrderTitle"></span></p>
+        <p><strong>Номер наряда:</strong> <span id="modalOrderNumber"></span></p>
+        <p><strong>Клиент:</strong> <span id="modalClientName"></span></p>
+        <p><strong>Адрес:</strong> <span id="modalClientAddress"></span></p>
+        <p><strong>Специалист:</strong> <span id="modalSpecialistName"></span></p>
+        <p><strong>Важность:</strong> <span id="modalPriority"></span></p>
+      </div>
+
+      <!-- Форма активации оборудования -->
+      <form>
+        <label for="serial-number">Серийный номер оборудования:</label>
+        <input type="text" id="serial-number" placeholder="Введите серийный номер" required>
+
+        <label for="model">Модель оборудования:</label>
+        <input type="text" id="model" placeholder="Введите модель оборудования" required>
+
+        <label for="installation-notes">Примечания по установке:</label>
+        <textarea id="installation-notes" rows="3" placeholder="Добавьте примечания по установке (необязательно)"></textarea>
+
+        <button type="button" class="button" onclick="activateEquipment()">Активировать оборудование</button>
+      </form>
+
+      <!-- Кнопки действий -->
+      <div class="action-buttons">
+        <button class="action-button" onclick="window.print()">Печать</button>
+        <button class="action-button" onclick="saveOrder()">Сохранить</button>
+        <button class="action-button" onclick="shareOrder()">Поделиться</button>
+      </div>
+
+      <!-- Уведомление об успешной активации -->
+      <div id="confirmationMessage" class="notification" style="display: none;">
+        Оборудование успешно активировано и информация обновлена в системе RMS.<br>
+        Наряд закрыт и работа завершена.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Открытие модального окна с информацией о наряде
+  function openOrderModal(orderNumber, clientName, clientAddress, priority, orderTitle, specialistName) {
+    document.getElementById("modalOrderNumber").textContent = orderNumber;
+    document.getElementById("modalClientName").textContent = clientName;
+    document.getElementById("modalClientAddress").textContent = clientAddress;
+    document.getElementById("modalPriority").textContent = priority;
+    document.getElementById("modalOrderTitle").textContent = orderTitle;
+    document.getElementById("modalSpecialistName").textContent = specialistName;
+    document.getElementById("orderModal").style.display = "block";
+  }
+
+  // Закрытие модального окна
+  function closeOrderModal() {
+    document.getElementById("orderModal").style.display = "none";
+    document.getElementById("confirmationMessage").style.display = "none";
+  }
+
+  // Функция активации оборудования
+  function activateEquipment() {
+    const serialNumber = document.getElementById("serial-number").value;
+    const model = document.getElementById("model").value;
+
+    if (serialNumber && model) {
+      document.getElementById("confirmationMessage").style.display = "block";
+    } else {
+      alert("Пожалуйста, заполните все обязательные поля.");
+    }
+  }
+
+  // Функции для сохранения и поделиться
+  function saveOrder() {
+    alert("Информация о наряде успешно сохранена.");
+  }
+
+  function shareOrder() {
+    alert("Ссылка на наряд скопирована для отправки.");
+  }
+</script>
+
+</body>
+</html>
